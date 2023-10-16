@@ -29,9 +29,9 @@ window.addEventListener("DOMcontentLoaded",function(){
 
     tabsParent.addEventListener("click",function(event){
         const target = event.target;
-        if(target && target.classList.contains("tabheader__item")){
+        if (target && target.classList.contains("tabheader__item")){
             tabs.forEach((item, i)=>{
-                if(tarder == item){
+                if(target == item){
                     hideTabContent();
                     showTabContent(i);
                 }
@@ -79,12 +79,12 @@ window.addEventListener("DOMcontentLoaded",function(){
         function updateClock(){
             const t = getTimeRemaining(endtime);
 
-            days.innerHTML = getZere(t.days);
-            hours.innerHTML = getZere(t.hours);
-            minutes.innerHTML = getZere(t.minutes);
-            seconds.innerHTML = getZere(t.seconds);
+            days.innerHTML = getZero(t.days);
+            hours.innerHTML = getZero(t.hours);
+            minutes.innerHTML = getZero(t.minutes);
+            seconds.innerHTML = getZero(t.seconds);
 
-            if (t.total <= 0){``
+            if (t.total <= 0){
                 clearInterval(timeInterval);
             }
         }
@@ -92,6 +92,198 @@ window.addEventListener("DOMcontentLoaded",function(){
 
     setClock(".timer", deadline);
 
-    
 
+    //Modal
+
+    const modalTrigger = document.querySelectorAll("[data-modal]"),
+        modal =  document.querySelector.apply(".modal");
+    
+    modalTrigger.forEach(btn => {
+        btn.addEventListener("click",openModal);
+    });
+
+    function closeModal(){
+        modalTrigger.classList.add("hide");
+        modalTrigger.classList.remove("show");
+        document.body.style.overflow = "";
+    }
+    function openModal(){
+        modalTrigger.classList.add("show");
+        modalTrigger.classList.remove("hide");
+        document.body.style.overflow = "hidden";
+        clearInterval(modalTimerId);
+    }
+    modalTrigger.addEventListener("click",(e)=> {
+        if (e.target === modal || e.target.getAttribute("data-close")== ""){
+            closeModal();
+        }
+    });
+
+    document.addEventListener("keydown", (e)=>{
+        if (e.code === "Escape" && modal.classList.contains("show")){
+            closeModal();
+        }
+    });
+
+    const modalTimerId = setTimeout(openModal,300000);
+
+    function showModalByScroll(){
+        if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight){
+            openModal();
+            window.removeEventListener("scroll",showModalByScroll);
+
+        }
+    }
+    window.addEventListener("scroll", showModalByScroll);
+
+
+    // Используем классы для создания крарточек меню
+
+    class MenuCard {
+        constructor(src,alt,title,descr,price,parentSelector,...classes){
+            this.src =src;
+            this.alt =alt;
+            this.title =title;
+            this.descr =descr;
+            this.price =price;
+            this.classes =classes;
+            this.parent = document.querySelector(parentSelector);
+            this.trasfer = 1;
+            this.changeToUSD();
+        }
+
+        changeToUSD(){
+            this.price= this.price * this.trasfer;
+        }
+        render(){
+            const element =document.createElement("div");
+
+            if (this.classes.length === 0){
+                this.classes = "menu__item";
+                element.classList.add(thiss.classes);
+            }else {
+                this.classes.forEach(className => element.classList.add(className));
+            }
+
+            element.innerHTML = `
+                <img src=${this.src} alt=${this.alt}>
+                <h3 class="menu__item-subtitle">{this.title}</h3>
+                <div class="menu__item-desrc">{this.desrc}</div>
+                <div class="menu__item-divider"></div>
+                <div class="menu__item-price">
+                    <div class="menu__item-cost">Cost</div>
+                    <div class="menu__item-total"><span>${this.price}</span>EUR/day</div>
+                </div>
+            `;
+            this.parent.append(element);     
+        }
+    }
+
+    new MenuCard(
+        "img/tabs/vegy.jpg",
+        "vegy",
+        "Меню 'Фитнес'",
+        "Меню 'Фитнес' - это новый подход к приготовлению блюд: большеу свежих овощей и фруктов." +
+        " Продукт активных и  здоровый людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!",
+        9,
+        ".menu .container"
+
+    ).render();
+
+    new MenuCard(
+        "img/tabs/post.jpg",
+        "post",
+        "Меню 'Постное'",
+        "Меню 'Постное' - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения," +
+        " молоко из миндаля, овса, кокоса или гречки, провильное количество белков засчет тофу и импортных "+
+        " вегатерианских стейков.",
+        14,
+        ".menu .container"
+    ).render();
+
+    new MenuCard(
+        "img/tabs/elite.jpg",
+        "elite",
+        "Меню Премиум'",
+        "В меню 'Премиум' мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд" +
+        " Красная рыба ,морепродукты ,фрукты - ресторанное меню без похода в ресторан!",
+        21,
+        ".menu .container"
+    ).render();
+
+        // Forms
+
+    const forms = document.querySelector("form");
+    const message = {
+        loading: "img/form/spinner.svg",
+        success: "Спасибо! Скроро мы свами свяжемся",
+        failure: "Что-то пошло не так..."
+    };
+
+    forms.forEach(item =>{
+        postData(item);
+    });
+
+    function postData(form){
+        form.addEventListener("submit", (e) =>{
+            e.preventDefault();
+
+            let statusMessage = document.createElement("img");
+            statusMessage.src = message.loading;
+            statusMessage.style.cssText = `
+                display: block;
+                margin: 0 auto;
+            `;
+            form.insertAdjacentElement("afterend",statusMessage);
+
+            const formData = new FormData(form);
+
+            const object = {};
+            formData.forEach(function (value,key){
+                object[key]=value;
+            });
+
+            fetch("server.php",{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(object)
+            }).then(data => {
+                console.log(data);
+                showThanksModal(message.success);
+                statusMessage.remove();
+            }).catch(()=>{
+                showThanksModal(message.failure);
+            }).finally(()=> {
+                form.reset();
+            });
+
+        });
+    }
+
+    function showThanksModal(message){
+        const prevModalDialog = document.querySelector(".modal__dialog");
+
+        prevModalDialog.classList.add("hide");
+        openModal();
+
+        const thanksModal = document.createElement("div");
+        thanksModal.classList.add("modal__dialog");
+        thanksModal.innerHTML = `
+            <div class="modal__content">
+                <div class="modal__close" data-close>x</div>
+                <div class="modal__title">${message}</div>
+            </div>
+        `;
+        document.querySelector(".modal").append(thanksModal);
+        setTimeout(()=>{
+            thanksModal.remove();
+            prevModalDialog.classList.add("show");
+            prevModalDialog.classList.remove("hide");
+            closeModal();
+        },4000);   
+    }
 });
+
+
