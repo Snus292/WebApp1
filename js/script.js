@@ -1,5 +1,5 @@
 window.addEventListener("DOMcontentLoaded",function() {
-    //Tabs
+//Tabs
     let tabs =document.querySelectorAll(".tabheader__item"),
         tabsContent = document.querySelectorAll(".tabcontent"),
         tabsParent = document.querySelector(".tabheader__items");
@@ -38,7 +38,7 @@ window.addEventListener("DOMcontentLoaded",function() {
             });
         }
     });
-    // Timer
+// Timer
 
     const deadline = "2021-12-11";
 
@@ -94,7 +94,7 @@ window.addEventListener("DOMcontentLoaded",function() {
     setClock(".timer", deadline);
 
 
-    //Modal
+//Modal
 
     const modalTrigger = document.querySelectorAll("[data-modal]"),
         modal =  document.querySelector(".modal");
@@ -137,8 +137,7 @@ window.addEventListener("DOMcontentLoaded",function() {
     }
     window.addEventListener("scroll", showModalByScroll);
 
-
-    // Используем классы для создания крарточек меню
+// Используем классы для создания крарточек меню
 
     class MenuCard {
         constructor(src,alt,title,descr,price,parentSelector,...classes){
@@ -149,27 +148,27 @@ window.addEventListener("DOMcontentLoaded",function() {
             this.price =price;
             this.classes =classes;
             this.parent = document.querySelector(parentSelector);
-            this.trasfer = 1;
+            this.transfer = 1;
             this.changeToUSD();
         }
 
         changeToUSD(){
-            this.price= this.price * this.trasfer;
+            this.price= this.price * this.transfer;
         }
         render(){
             const element =document.createElement("div");
 
             if (this.classes.length === 0){
                 this.classes = "menu__item";
-                element.classList.add(thiss.classes);
+                element.classList.add(this.classes);
             }else {
                 this.classes.forEach(className => element.classList.add(className));
             }
 
             element.innerHTML = `
                 <img src=${this.src} alt=${this.alt}>
-                <h3 class="menu__item-subtitle">{this.title}</h3>
-                <div class="menu__item-descr">{this.descr}</div>
+                <h3 class="menu__item-subtitle">${this.title}</h3>
+                <div class="menu__item-descr">${this.descr}</div>
                 <div class="menu__item-divider"></div>
                 <div class="menu__item-price">
                     <div class="menu__item-cost">Cost</div>
@@ -179,48 +178,14 @@ window.addEventListener("DOMcontentLoaded",function() {
             this.parent.append(element);     
         }
     }
-    getResourse("http://localhost:3000/menu")
+    getResource("http://localhost:3000/menu")
         .then(data =>{
             data.forEach(({img,altimg,title,descr,price})=>{
                 new MenuCard(img, altimg, title, descr, price, ".menu .container").render();
             });
         });
 
-    // new MenuCard(
-    //     "img/tabs/vegy.jpg",
-    //     "vegy",
-    //     "Меню 'Фитнес'",
-    //     "Меню 'Фитнес' - это новый подход к приготовлению блюд: большеу свежих овощей и фруктов." +
-    //     " Продукт активных и  здоровый людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!",
-    //     9,
-    //     ".menu .container"
-
-    // ).render();
-
-    // new MenuCard(
-    //     "img/tabs/post.jpg",
-    //     "post",
-    //     "Меню 'Постное'",
-    //     "Меню 'Постное' - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения," +
-    //     " молоко из миндаля, овса, кокоса или гречки, провильное количество белков засчет тофу и импортных "+
-    //     " вегатерианских стейков.",
-    //     14,
-    //     ".menu .container"
-    // ).render();
-
-    // new MenuCard(
-    //     "img/tabs/elite.jpg",
-    //     "elite",
-    //     "Меню Премиум'",
-    //     "В меню 'Премиум' мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд" +
-    //     " Красная рыба ,морепродукты ,фрукты - ресторанное меню без похода в ресторан!",
-    //     21,
-    //     ".menu .container"
-    // ).render();
-
-    
-
-    // Forms
+// Forms
 
     const forms = document.querySelector("form");
     const message = {
@@ -244,7 +209,7 @@ window.addEventListener("DOMcontentLoaded",function() {
 
         return await res.json();
     };
-    async function getResourse(url){
+    async function getResource(url){
         let res =await fetch(url);
 
         if(!res.ok){
@@ -306,7 +271,7 @@ window.addEventListener("DOMcontentLoaded",function() {
             closeModal();
         },4000);   
     }
-    // Slider
+// Slider
 
     let offset = 0;
     let slideIndex = 1;
@@ -357,7 +322,7 @@ window.addEventListener("DOMcontentLoaded",function() {
         list-style: none;
 
     `; 
-    // Добавить стили  по желанию
+// Добавить стили по желанию
     slider.append(indicators);
 
     for (let i = 0; i < slides.length; i++){
@@ -417,7 +382,7 @@ window.addEventListener("DOMcontentLoaded",function() {
         }else {
             offset -= deleteNotDigits(width);
         }
-        slidesField.style.transform = `traslateX(-${offset}px)`;
+        slidesField.style.transform = `translateX(-${offset}px)`;
 
         if(slideIndex == 1){
             slideIndex = slides.length;
@@ -442,7 +407,7 @@ window.addEventListener("DOMcontentLoaded",function() {
             slideIndex = slideTo;
             offset =deleteNotDigits(width) * (slideTo -1);
 
-            slidesField.style.transform = `tramslateX(-${offset}px)`;
+            slidesField.style.transform = `translateX(-${offset}px)`;
 
             if(slides.length < 10){
                 current.textContent = `0${slideIndex}`;
@@ -459,7 +424,7 @@ window.addEventListener("DOMcontentLoaded",function() {
         return +str.replace(/\D/g, "");
     }
 
-    // Calculator
+// Calculator
 
     const result = document.querySelector(".calculating__result span");
 
@@ -507,7 +472,7 @@ window.addEventListener("DOMcontentLoaded",function() {
         });
     }
 
-    initLocalSettings("#gender div", "calculaing__choose-item_active");
+    initLocalSettings("#gender div", "calculating__choose-item_active");
     initLocalSettings(".calculating__choose_big div", "calculating__choose-item_active");
 
     function getStaticInformation(selector, activeClass) {
@@ -536,7 +501,7 @@ window.addEventListener("DOMcontentLoaded",function() {
     }
 
     getStaticInformation("#gender div", "calculating__choose-item_active");
-    getStaticInformation(".calculating__choose_big div", "calculating__choose-iten_active");
+    getStaticInformation(".calculating__choose_big div", "calculating__choose-item_active");
 
     function getDynamicInformation(selector){
         const input = document.querySelector(selector);
