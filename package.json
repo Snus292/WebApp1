@@ -1,0 +1,22 @@
+{
+  "name": "food",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Snus292/WebApp1.git"
+  },
+  "keywords": [
+    "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"
+  ],
+  "author": "Georgiy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Snus292/WebApp1/issues"
+  },
+  "homepage": "https://github.com/Snus292/WebApp1#readme"
+}
